@@ -1,21 +1,12 @@
 FROM node:22-alpine
 
 RUN apk add --no-cache tini curl bash git \
-    openjdk17-jre-headless \
     && npm install -g openclaw@latest pm2
 
-# signal-cli installation
-ARG SIGNAL_CLI_VERSION=0.13.12
-RUN curl -sL "https://github.com/AsamK/signal-cli/releases/download/v${SIGNAL_CLI_VERSION}/signal-cli-${SIGNAL_CLI_VERSION}-Linux.tar.gz" \
-    | tar xz -C /opt/ \
-    && ln -s /opt/signal-cli-${SIGNAL_CLI_VERSION}/bin/signal-cli /usr/local/bin/signal-cli
-
-# Create directories
 RUN mkdir -p /data/.openclaw/agents/cto-assistant/skills \
     && mkdir -p /data/vault \
     && mkdir -p /app/config
 
-# Copy configuration files
 COPY config/ /app/config/
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
