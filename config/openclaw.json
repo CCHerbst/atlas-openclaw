@@ -1,0 +1,43 @@
+{
+  "gateway": {
+    "bind": "0.0.0.0",
+    "port": 18789
+  },
+  "providers": {
+    "openrouter": {
+      "apiKey": "${OPENROUTER_API_KEY}",
+      "baseUrl": "https://openrouter.ai/api/v1"
+    },
+    "perplexity": {
+      "apiKey": "${PERPLEXITY_API_KEY}",
+      "baseUrl": "https://api.perplexity.ai"
+    }
+  },
+  "models": {
+    "default": "openrouter/google/gemini-2.5-flash-lite",
+    "complex": "openrouter/anthropic/claude-sonnet-4",
+    "heartbeat": "openrouter/google/gemini-2.5-flash-lite"
+  },
+  "agents": {
+    "default": "cto-assistant"
+  },
+  "heartbeat": {
+    "intervalMinutes": 30,
+    "activeHours": {
+      "start": "06:00",
+      "end": "22:00"
+    },
+    "timezone": "America/Chicago"
+  },
+  "channels": {
+    "signal": {
+      "enabled": true,
+      "phoneNumber": "${SIGNAL_PHONE_NUMBER}",
+      "adapter": "signal-cli"
+    },
+    "discord": {
+      "enabled": true,
+      "token": "${DISCORD_BOT_TOKEN}"
+    }
+  }
+}
