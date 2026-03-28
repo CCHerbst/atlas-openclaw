@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-mkdir -p /data/.openclaw/agents/cto-assistant/skills/vault-search
-mkdir -p /data/.openclaw/agents/cto-assistant/skills/vault-write
-mkdir -p /data/.openclaw/agents/cto-assistant/skills/web-research
-mkdir -p /data/.openclaw/agents/cto-assistant/skills/tech-radar
-mkdir -p /data/.openclaw/agents/cto-assistant/skills/project-mgmt
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/vault-search
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/vault-write
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/web-research
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/tech-radar
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/project-mgmt
 mkdir -p /data/vault
 
 if [ -d /data/vault/.git ]; then
@@ -14,7 +14,8 @@ else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
 
-CONFIG_DIR=/data/.openclaw/agents/cto-assistant
+# Only copy config on FIRST run (check for SOUL.md as marker)
+CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "First run: copying agent configuration..."
   cp /app/config/SOUL.md "$CONFIG_DIR/"
@@ -27,10 +28,9 @@ if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "Configuration copied."
 fi
 
-# Write validated config (no providers key; OpenRouter reads from OPENROUTER_API_KEY env var)
-for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
-  mkdir -p "$CFG_DIR"
-  cat > "$CFG_DIR/openclaw.json" << OCJSON
+# Only write openclaw.json on FIRST run
+if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
+  cat > /data/.openclaw/.openclaw/openclaw.json << OCJSON
 {
   "gateway": {
     "mode": "local",
@@ -51,12 +51,15 @@ for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
   }
 }
 OCJSON
-done
-echo "OpenClaw config written."
+  echo "OpenClaw config written."
+else
+  echo "Config exists, preserving."
+fi
 
+# Periodic vault sync (separate process, does NOT touch config)
 while true; do
-  cd /data/vault && git pull --rebase 2>/dev/null || true
   sleep 300
+  cd /data/vault && git pull --rebase 2>/dev/null || true
 done &
 
 echo "Starting Atlas gateway..."
