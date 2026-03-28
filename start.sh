@@ -27,7 +27,7 @@ if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "Configuration copied."
 fi
 
-# Write config using current OpenClaw schema (not legacy keys)
+# Write validated config (no providers key; OpenRouter reads from OPENROUTER_API_KEY env var)
 for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
   mkdir -p "$CFG_DIR"
   cat > "$CFG_DIR/openclaw.json" << OCJSON
@@ -36,11 +36,6 @@ for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
     "mode": "local",
     "bind": "lan",
     "port": 18789
-  },
-  "providers": {
-    "openrouter": {
-      "apiKey": "${OPENROUTER_API_KEY}"
-    }
   },
   "agents": {
     "defaults": {
