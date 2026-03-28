@@ -15,7 +15,7 @@ else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
 
-# Copy config on first run
+# Copy agent config on first run
 CONFIG_DIR=/data/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "First run: copying agent configuration..."
@@ -29,19 +29,35 @@ if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "Configuration copied."
 fi
 
-# Ensure openclaw config exists with gateway.mode=local
-if [ ! -f /data/.openclaw/openclaw.json ]; then
-  cat > /data/.openclaw/openclaw.json << 'OCJSON'
+# Write openclaw config to BOTH possible locations
+# OpenClaw nests .openclaw inside OPENCLAW_HOME
+for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
+  mkdir -p "$CFG_DIR"
+  cat > "$CFG_DIR/openclaw.json" << OCJSON
 {
   "gateway": {
     "mode": "local",
     "bind": "0.0.0.0",
     "port": 18789
+  },
+  "providers": {
+    "openrouter": {
+      "apiKey": "${OPENROUTER_API_KEY}"
+    }
+  },
+  "agent": {
+    "model": "openrouter/google/gemini-2.5-flash-lite",
+    "provider": "openrouter"
+  },
+  "channels": {
+    "discord": {
+      "token": "${DISCORD_BOT_TOKEN}"
+    }
   }
 }
 OCJSON
-  echo "OpenClaw config created."
-fi
+done
+echo "OpenClaw config written."
 
 # Periodic vault sync
 while true; do
