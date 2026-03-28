@@ -8,14 +8,12 @@ mkdir -p /data/.openclaw/agents/cto-assistant/skills/tech-radar
 mkdir -p /data/.openclaw/agents/cto-assistant/skills/project-mgmt
 mkdir -p /data/vault
 
-# Clone/update vault
 if [ -d /data/vault/.git ]; then
   cd /data/vault && git pull --rebase || true
 else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
 
-# Copy agent config on first run
 CONFIG_DIR=/data/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "First run: copying agent configuration..."
@@ -29,15 +27,14 @@ if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "Configuration copied."
 fi
 
-# Write openclaw config to BOTH possible locations
-# OpenClaw nests .openclaw inside OPENCLAW_HOME
+# Write config using current OpenClaw schema (not legacy keys)
 for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
   mkdir -p "$CFG_DIR"
   cat > "$CFG_DIR/openclaw.json" << OCJSON
 {
   "gateway": {
     "mode": "local",
-    "bind": "0.0.0.0",
+    "bind": "lan",
     "port": 18789
   },
   "providers": {
@@ -45,9 +42,12 @@ for CFG_DIR in /data/.openclaw /data/.openclaw/.openclaw; do
       "apiKey": "${OPENROUTER_API_KEY}"
     }
   },
-  "agent": {
-    "model": "openrouter/google/gemini-2.5-flash-lite",
-    "provider": "openrouter"
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/google/gemini-2.5-flash-lite"
+      }
+    }
   },
   "channels": {
     "discord": {
@@ -59,11 +59,10 @@ OCJSON
 done
 echo "OpenClaw config written."
 
-# Periodic vault sync
 while true; do
   cd /data/vault && git pull --rebase 2>/dev/null || true
   sleep 300
 done &
 
 echo "Starting Atlas gateway..."
-exec openclaw gateway --allow-unconfigured
+exec openclaw gateway
