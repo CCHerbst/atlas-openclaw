@@ -40,4 +40,4 @@ done &
 
 # Start openclaw gateway in foreground (container mode)
 echo "Starting Atlas gateway..."
-exec openclaw gateway --foreground
+exec openclaw gateway
