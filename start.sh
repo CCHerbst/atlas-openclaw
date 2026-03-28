@@ -38,6 +38,6 @@ while true; do
   sleep 300
 done &
 
-# Start openclaw
-echo "Starting Atlas..."
-exec openclaw gateway start
+# Start openclaw gateway in foreground (container mode)
+echo "Starting Atlas gateway..."
+exec openclaw gateway --foreground
