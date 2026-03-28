@@ -10,9 +10,15 @@ RUN curl -sL "https://github.com/AsamK/signal-cli/releases/download/v${SIGNAL_CL
     | tar xz -C /opt/ \
     && ln -s /opt/signal-cli-${SIGNAL_CLI_VERSION}/bin/signal-cli /usr/local/bin/signal-cli
 
-# Create data directory
+# Create directories
 RUN mkdir -p /data/.openclaw/agents/cto-assistant/skills \
-    && mkdir -p /data/vault
+    && mkdir -p /data/vault \
+    && mkdir -p /app/config
+
+# Copy configuration files
+COPY config/ /app/config/
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 ENV OPENCLAW_HOME=/data/.openclaw
 ENV NODE_ENV=production
@@ -22,4 +28,4 @@ WORKDIR /data
 EXPOSE 18789
 
 ENTRYPOINT ["tini", "--"]
-CMD ["pm2-runtime", "openclaw", "--", "gateway", "start"]
+CMD ["/app/start.sh"]
