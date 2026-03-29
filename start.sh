@@ -38,7 +38,8 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "agents": {
     "defaults": {
       "model": {
-        "primary": "openrouter/deepseek/deepseek-v3.2"
+        "primary": "openrouter/deepseek/deepseek-v3.2",
+        "fallbacks": ["openrouter/openai/gpt-5-mini"]
       }
     }
   },
