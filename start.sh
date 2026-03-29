@@ -7,16 +7,14 @@ mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/web-research
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/tech-radar
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/project-mgmt
 mkdir -p /data/.openclaw/.openclaw/workspace
-mkdir -p /data/vault
 
-if [ -d /data/vault/.git ]; then
-  cd /data/vault && git pull --rebase || true
+# Clone vault directly into the workspace directory
+VAULT_DIR=/data/.openclaw/.openclaw/workspace/vault
+if [ -d "$VAULT_DIR/.git" ]; then
+  cd "$VAULT_DIR" && git pull --rebase || true
 else
-  git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
+  git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" "$VAULT_DIR"
 fi
-
-# Symlink vault into workspace
-ln -sfn /data/vault /data/.openclaw/.openclaw/workspace/vault
 
 CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
@@ -50,15 +48,7 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "channels": {
     "discord": {
       "token": "${DISCORD_BOT_TOKEN}",
-      "groupPolicy": "open",
-      "guilds": {
-        "1487524597988593715": {
-          "channels": {
-            "1487524598458220744": {"allow": true},
-            "1487632199363723376": {"allow": true}
-          }
-        }
-      }
+      "groupPolicy": "open"
     }
   },
   "commands": {
@@ -73,9 +63,10 @@ else
   echo "Config exists, preserving."
 fi
 
+# Periodic vault sync
 while true; do
   sleep 300
-  cd /data/vault && git pull --rebase 2>/dev/null || true
+  cd "$VAULT_DIR" && git pull --rebase 2>/dev/null || true
 done &
 
 echo "Starting Atlas gateway..."
