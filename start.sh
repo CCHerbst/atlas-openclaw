@@ -8,7 +8,6 @@ mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/tech-radar
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/project-mgmt
 mkdir -p /data/.openclaw/.openclaw/workspace
 
-# Clone vault directly into the workspace directory
 VAULT_DIR=/data/.openclaw/.openclaw/workspace/vault
 if [ -d "$VAULT_DIR/.git" ]; then
   cd "$VAULT_DIR" && git pull --rebase || true
@@ -62,6 +61,13 @@ OCJSON
 else
   echo "Config exists, preserving."
 fi
+
+# Clear stale gateway state before starting (fixes "awaiting gateway readiness" hang)
+rm -rf /data/.openclaw/.openclaw/gateway/state 2>/dev/null || true
+echo "Cleared gateway state."
+
+# Run doctor to fix any config issues
+openclaw doctor --fix 2>/dev/null || true
 
 # Periodic vault sync
 while true; do
