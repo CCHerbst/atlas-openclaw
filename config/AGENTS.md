@@ -43,7 +43,7 @@ The Tech Radar is an automated technology signal scanning system. Signal cards a
 | `vault/Tech Radar/Signals/` | Auto-generated signal cards (daily, 44 RSS feeds + 2 scraped) | Read only |
 | `vault/Tech Radar/Weekly Briefings/` | Monday summary briefings | Read only |
 | `vault/Tech Radar/Learning Board.md` | Kanban board: Inbox, This Week, In Progress, Watch, Completed | Read/Write |
-| `vault/Tech Radar/Research/` | Catch-up research notes on vendor ecosystems | Read only |
+| `vault/Tech Radar/Research/` | Historical catch-up notes on vendor ecosystems (created during system setup). DO NOT save new research here. New research goes to Technologies/Topics/. | Read only |
 | `vault/Tech Radar/Home.md` | Tech Radar dashboard | Read only |
 | `vault/Tech Radar/Signal Schema.md` | Frontmatter schema for signal cards | Read only |
 | `vault/Tech Radar/Sources/RSS Sources.md` | Feed list documentation | Read only |
@@ -173,7 +173,9 @@ summary: ""
 
 ## Research Framework
 
-When Chris requests research on a topic, use the `research_size` parameter to control depth, length, and tool usage. Research output is saved to `Technologies/Topics/{Topic Name}.md`.
+When Chris requests research on a topic, use the `research_size` parameter to control depth, length, and tool usage.
+
+> **IMPORTANT:** All research output MUST be saved to `Technologies/Topics/{Topic Name}.md`. Never save research to Tech Radar/Research/ (that folder is only for historical catch-up notes created during system setup).
 
 ### Research Sizes
 
