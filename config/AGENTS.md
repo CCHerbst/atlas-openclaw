@@ -156,7 +156,7 @@ scope: "enterprise-wide|manufacturing|distribution|R&D"
 ```
 **Body sections:** Overview, Deployment at IP Corporation table, Subsidiary Deployment table, Integration Points table, Roadmap and Planned Changes, Architecture and Technical Notes, Related (vendor link, related systems, topics)
 
-### Topic
+### Topic / Research
 **Path:** `Technologies/Topics/{Name}.md`
 **Frontmatter:**
 ```yaml
@@ -165,10 +165,93 @@ title: "Topic Name"
 date: "YYYY-MM-DD"
 tags: []
 topic_status: "active"
+research_size: "small|medium|large"
 summary: ""
 ---
 ```
-**Body sections:** Overview, Key Concepts, Relevance to IP Corporation, Resources, Related
+**Body sections vary by research_size (see Research Framework below).**
+
+## Research Framework
+
+When Chris requests research on a topic, use the `research_size` parameter to control depth, length, and tool usage. Research output is saved to `Technologies/Topics/{Topic Name}.md`.
+
+### Research Sizes
+
+**Small: "What is this and should I care?"**
+- Length: 1-2 pages
+- Sources: 2-3 references
+- Tools: Perplexity API (sonar model) for quick web-grounded answers
+- Structure:
+  - Overview (2-3 paragraphs)
+  - Key Takeaways (3-5 bullet points)
+  - Relevance to IP Corporation (1-2 paragraphs connecting to our stack, strategy, or business)
+  - References (numbered list with URLs)
+
+**Medium: "Help me understand this well enough to make a decision"**
+- Length: 3-5 pages
+- Sources: 5-10 references
+- Tools: Perplexity API (sonar model for facts, sonar-deep-research for analysis), vault cross-references
+- Structure:
+  - Overview (3-4 paragraphs)
+  - Key Concepts (subsections for each major concept)
+  - Current Landscape (vendors, approaches, maturity)
+  - Relevance to IP Corporation (2-3 paragraphs with specific connections to systems, strategy, and roadmap)
+  - Considerations and Trade-offs
+  - References (numbered list with URLs)
+  - Related Vault Documents (wiki-links to relevant Strategy, Systems, or Vendor files)
+
+**Large: "I need to present this or build a business case"**
+- Length: 5-10+ pages
+- Sources: 10+ references
+- Tools: Perplexity API (sonar-deep-research), Manus.ai (for multi-source deep investigation), vault cross-references
+- Structure:
+  - Executive Summary (3-5 sentences)
+  - Overview and Background
+  - Key Concepts and Architecture (detailed subsections)
+  - Vendor and Product Landscape (comparison tables where applicable)
+  - Industry Adoption (who is using this, case studies, results)
+  - Relevance to IP Corporation:
+    - How this connects to our current stack and strategy
+    - Which subsidiaries or initiatives would benefit
+    - Prerequisites and dependencies
+    - Estimated timeline and effort
+    - Risks and considerations
+  - Recommendations (numbered, actionable)
+  - References (numbered list with URLs, organized by category)
+  - Related Vault Documents (wiki-links)
+
+### Research Triggers
+Chris will request research in formats like:
+- "Research [topic], small" or "Quick research on [topic]"
+- "Research [topic], medium" or "Research [topic]"
+- "Research [topic], large" or "Deep dive on [topic]"
+
+If no size is specified, default to **medium**.
+
+### Research Tools
+
+**Perplexity API** (available via PERPLEXITY_API_KEY environment variable)
+- Endpoint: `https://api.perplexity.ai/chat/completions`
+- Use `sonar` model for quick factual lookups (small research, initial queries)
+- Use `sonar-deep-research` model for comprehensive multi-source investigation (medium and large research)
+- Use for: current facts, vendor information, market data, technology comparisons, recent developments
+- Restriction: use ONLY for research tasks, not for general conversation
+
+**Manus.ai** (available via Chris's subscription)
+- Use for: large research tasks requiring multi-source deep investigation, competitive analysis, market sizing
+- Use for: tasks that benefit from autonomous multi-step research across many sources
+- Restriction: use ONLY for large research tasks, not for small/medium or general conversation
+- When invoking Manus, describe the research objective clearly and specify the IP Corporation context
+
+**Vault**
+- Always check the vault first before external research
+- Cross-reference findings with existing vault documents (Technology Systems Inventory, Strategy, Vendors, Tech Radar signals)
+- Note any discrepancies between external research and vault content
+
+### After Research
+- Save the research to `Technologies/Topics/{Topic Name}.md` via the GitHub API
+- Deliver a summary of findings in Discord
+- If the research reveals something that affects the Technology Strategy or a specific vendor relationship, flag it
 
 ## Key Cross-References
 
