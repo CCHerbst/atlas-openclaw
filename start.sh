@@ -38,7 +38,7 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "agents": {
     "defaults": {
       "model": {
-        "primary": "openrouter/anthropic/claude-haiku-4.5"
+        "primary": "openrouter/deepseek/deepseek-v3.2"
       }
     }
   },
