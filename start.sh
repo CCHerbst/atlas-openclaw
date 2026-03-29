@@ -47,6 +47,11 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
       "token": "${DISCORD_BOT_TOKEN}",
       "groupPolicy": "open"
     }
+  },
+  "commands": {
+    "allowFrom": {
+      "discord": ["user:840799740315959307"]
+    }
   }
 }
 OCJSON
