@@ -45,7 +45,7 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "channels": {
     "discord": {
       "token": "${DISCORD_BOT_TOKEN}",
-      "allowAll": true
+      "groupPolicy": "open"
     }
   }
 }
