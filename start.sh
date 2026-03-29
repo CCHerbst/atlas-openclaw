@@ -20,6 +20,9 @@ CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
 cp /app/config/SOUL.md "$CONFIG_DIR/"
 cp /app/config/USER.md "$CONFIG_DIR/"
 cp /app/config/AGENTS.md "$CONFIG_DIR/"
+cp /app/config/HEARTBEAT.md "$CONFIG_DIR/" 2>/dev/null || true
+# Only copy BOOTSTRAP.md if it hasn't been run yet (it self-deletes after first run)
+[ ! -f "$CONFIG_DIR/.bootstrap-done" ] && cp /app/config/BOOTSTRAP.md "$CONFIG_DIR/" 2>/dev/null || true
 for skill in vault-search vault-write web-research tech-radar project-mgmt; do
   cp "/app/config/skills/$skill/SKILL.md" "$CONFIG_DIR/skills/$skill/"
 done
