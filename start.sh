@@ -6,6 +6,7 @@ mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/vault-write
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/web-research
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/tech-radar
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/project-mgmt
+mkdir -p /data/.openclaw/.openclaw/workspace
 mkdir -p /data/vault
 
 if [ -d /data/vault/.git ]; then
@@ -13,6 +14,9 @@ if [ -d /data/vault/.git ]; then
 else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
+
+# Symlink vault into OpenClaw workspace so tools can access it
+ln -sfn /data/vault /data/.openclaw/.openclaw/workspace/vault
 
 CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
