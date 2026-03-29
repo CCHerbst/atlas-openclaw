@@ -38,7 +38,7 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "agents": {
     "defaults": {
       "model": {
-        "primary": "openrouter/google/gemini-2.5-flash-lite"
+        "primary": "openrouter/anthropic/claude-haiku-4.5"
       }
     }
   },
