@@ -43,6 +43,9 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
       "model": {
         "primary": "openrouter/deepseek/deepseek-v3.2",
         "fallbacks": ["openrouter/openai/gpt-5-mini"]
+      },
+      "heartbeat": {
+        "model": "openrouter/openai/gpt-5-nano"
       }
     }
   },
