@@ -14,7 +14,6 @@ else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
 
-# Only copy config on FIRST run (check for SOUL.md as marker)
 CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
 if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "First run: copying agent configuration..."
@@ -28,7 +27,6 @@ if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
   echo "Configuration copied."
 fi
 
-# Only write openclaw.json on FIRST run
 if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   cat > /data/.openclaw/.openclaw/openclaw.json << OCJSON
 {
@@ -46,7 +44,8 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   },
   "channels": {
     "discord": {
-      "token": "${DISCORD_BOT_TOKEN}"
+      "token": "${DISCORD_BOT_TOKEN}",
+      "allowAll": true
     }
   }
 }
@@ -56,7 +55,6 @@ else
   echo "Config exists, preserving."
 fi
 
-# Periodic vault sync (separate process, does NOT touch config)
 while true; do
   sleep 300
   cd /data/vault && git pull --rebase 2>/dev/null || true
