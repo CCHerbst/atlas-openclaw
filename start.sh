@@ -15,19 +15,18 @@ else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" "$VAULT_DIR"
 fi
 
+# Always refresh agent config (SOUL, USER, AGENTS, skills) from the Docker image
 CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
-if [ ! -f "$CONFIG_DIR/SOUL.md" ]; then
-  echo "First run: copying agent configuration..."
-  cp /app/config/SOUL.md "$CONFIG_DIR/"
-  cp /app/config/USER.md "$CONFIG_DIR/"
-  cp /app/config/AGENTS.md "$CONFIG_DIR/"
-  echo "# Memory" > "$CONFIG_DIR/MEMORY.md"
-  for skill in vault-search vault-write web-research tech-radar project-mgmt; do
-    cp "/app/config/skills/$skill/SKILL.md" "$CONFIG_DIR/skills/$skill/"
-  done
-  echo "Configuration copied."
-fi
+cp /app/config/SOUL.md "$CONFIG_DIR/"
+cp /app/config/USER.md "$CONFIG_DIR/"
+cp /app/config/AGENTS.md "$CONFIG_DIR/"
+for skill in vault-search vault-write web-research tech-radar project-mgmt; do
+  cp "/app/config/skills/$skill/SKILL.md" "$CONFIG_DIR/skills/$skill/"
+done
+[ -f "$CONFIG_DIR/MEMORY.md" ] || echo "# Memory" > "$CONFIG_DIR/MEMORY.md"
+echo "Agent config refreshed."
 
+# Only write openclaw.json on first run (preserve OpenClaw's managed config)
 if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   cat > /data/.openclaw/.openclaw/openclaw.json << OCJSON
 {
@@ -59,14 +58,13 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
 OCJSON
   echo "OpenClaw config written."
 else
-  echo "Config exists, preserving."
+  echo "OpenClaw config preserved."
 fi
 
-# Clear stale gateway state before starting (fixes "awaiting gateway readiness" hang)
+# Clear stale gateway state
 rm -rf /data/.openclaw/.openclaw/gateway/state 2>/dev/null || true
-echo "Cleared gateway state."
 
-# Run doctor to fix any config issues
+# Run doctor
 openclaw doctor --fix 2>/dev/null || true
 
 # Periodic vault sync
