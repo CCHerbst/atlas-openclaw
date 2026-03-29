@@ -15,7 +15,7 @@ else
   git clone "https://${GITHUB_PAT}@github.com/CCHerbst/Work-IPC.git" /data/vault
 fi
 
-# Symlink vault into OpenClaw workspace so tools can access it
+# Symlink vault into workspace
 ln -sfn /data/vault /data/.openclaw/.openclaw/workspace/vault
 
 CONFIG_DIR=/data/.openclaw/.openclaw/agents/cto-assistant
@@ -50,7 +50,15 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "channels": {
     "discord": {
       "token": "${DISCORD_BOT_TOKEN}",
-      "groupPolicy": "open"
+      "groupPolicy": "open",
+      "guilds": {
+        "1487524597988593715": {
+          "channels": {
+            "1487524598458220744": {"allow": true},
+            "1487632199363723376": {"allow": true}
+          }
+        }
+      }
     }
   },
   "commands": {
