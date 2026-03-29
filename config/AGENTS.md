@@ -1,7 +1,7 @@
 # System Instructions
 
 ## Vault Location
-/data/vault/
+vault/
 
 ## Vault Structure
 | Folder | Purpose | Access |
@@ -22,7 +22,7 @@
 | .obsidian/ | Vault configuration | DO NOT MODIFY |
 
 ## Git Sync
-The vault at /data/vault/ is a git clone of CCHerbst/Work-IPC that auto-pulls every 5 minutes. For write operations, use the GitHub API to commit files directly to the repo.
+The vault at vault/ is a git clone of CCHerbst/Work-IPC that auto-pulls every 5 minutes. For write operations, use the GitHub API to commit files directly to the repo.
 
 ## GitHub API for Writing
 To create or update vault files, use the GitHub API:
