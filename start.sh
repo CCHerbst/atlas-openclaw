@@ -6,6 +6,7 @@ mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/vault-write
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/web-research
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/tech-radar
 mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/project-mgmt
+mkdir -p /data/.openclaw/.openclaw/agents/cto-assistant/skills/agentmail
 mkdir -p /data/.openclaw/.openclaw/workspace
 
 VAULT_DIR=/data/.openclaw/.openclaw/workspace/vault
@@ -23,7 +24,7 @@ cp /app/config/AGENTS.md "$CONFIG_DIR/"
 cp /app/config/HEARTBEAT.md "$CONFIG_DIR/" 2>/dev/null || true
 # Only copy BOOTSTRAP.md if it hasn't been run yet (it self-deletes after first run)
 [ ! -f "$CONFIG_DIR/.bootstrap-done" ] && cp /app/config/BOOTSTRAP.md "$CONFIG_DIR/" 2>/dev/null || true
-for skill in vault-search vault-write web-research tech-radar project-mgmt; do
+for skill in vault-search vault-write web-research tech-radar project-mgmt agentmail; do
   cp "/app/config/skills/$skill/SKILL.md" "$CONFIG_DIR/skills/$skill/"
 done
 [ -f "$CONFIG_DIR/MEMORY.md" ] || echo "# Memory" > "$CONFIG_DIR/MEMORY.md"
