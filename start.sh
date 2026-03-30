@@ -65,6 +65,13 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
     "allowFrom": {
       "discord": ["user:840799740315959307"]
     }
+  },
+  "skills": {
+    "entries": {
+      "agentmail": {
+        "enabled": true
+      }
+    }
   }
 }
 OCJSON
