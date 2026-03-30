@@ -36,7 +36,13 @@ if [ ! -f /data/.openclaw/.openclaw/openclaw.json ]; then
   "gateway": {
     "mode": "local",
     "bind": "lan",
-    "port": 18789
+    "port": 18789,
+    "auth": {
+      "mode": "none"
+    },
+    "controlUi": {
+      "allowInsecureAuth": true
+    }
   },
   "agents": {
     "defaults": {
