@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache bash git && npm install -g openclaw@2026.3.28
+RUN apk add --no-cache bash git && npm install -g openclaw@2026.3.13
 
 COPY config/ /app/config/
 COPY start.sh /app/start.sh
